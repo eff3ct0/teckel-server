@@ -11,6 +11,7 @@ object Docker {
   def projectSettings: Seq[Setting[_]] = Seq(
     docker / imageNames := Seq(
       // Sets the latest tag
+      ImageName(s"eff3ct/${name.value}:${version.value}"),
       ImageName(s"eff3ct/${name.value}:latest")
     ),
     docker / dockerfile := {

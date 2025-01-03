@@ -22,10 +22,24 @@
  * SOFTWARE.
  */
 
-package com.eff3ct.teckel.interface
+package com.eff3ct.teckel.server.route
 
-object error {
+import cats.effect.Concurrent
+import org.http4s.HttpRoutes
+import org.http4s.circe.CirceEntityCodec._
+import org.http4s.dsl.Http4sDsl
 
-  case class ApiError(code: Int, message: String)
+object HealthRoutes {
+  val HealthPath: String = "health"
+
+  def impl[F[_]: Concurrent]: HttpRoutes[F] = {
+
+    val dsl = new Http4sDsl[F] {}
+    import dsl._
+
+    HttpRoutes.of[F] { case GET -> Root / HealthPath =>
+      Ok("Api is up")
+    }
+  }
 
 }

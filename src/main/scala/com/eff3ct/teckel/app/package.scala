@@ -22,10 +22,13 @@
  * SOFTWARE.
  */
 
-package com.eff3ct.teckel.interface
+package com.eff3ct.teckel
 
-object error {
+import cats.effect.Sync
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.slf4j.Slf4jFactory
 
-  case class ApiError(code: Int, message: String)
+package object app {
+  implicit def logger[F[_]: Sync]: Logger[F] = Slf4jFactory.create[F].getLogger
 
 }

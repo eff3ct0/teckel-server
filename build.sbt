@@ -10,7 +10,7 @@ lazy val root =
       name              := "teckel-server",
       scalaVersion      := Version.Scala,
       scalafmtOnCompile := true,
-      Compile / mainClass := Some("com.eff3ct.teckel.server.App"),
+      Compile / mainClass := Some("com.eff3ct.teckel.app.Main"),
       javacOptions := Seq(
         "-g:none",
         "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED"
