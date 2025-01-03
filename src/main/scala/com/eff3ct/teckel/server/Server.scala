@@ -30,7 +30,7 @@ import com.comcast.ip4s.{Host, Port}
 import com.eff3ct.teckel.controller.ApiResponseEnrich
 import com.eff3ct.teckel.interface.error.ApiError
 import com.eff3ct.teckel.server.config.ApiConfig
-import com.eff3ct.teckel.server.route.{HealthRoutes, TeckelRoutes}
+import com.eff3ct.teckel.server.route.{DataFrameRoutes, HealthRoutes, TeckelRoutes}
 import fs2.io.net.Network
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits._
@@ -43,12 +43,13 @@ object Server {
   def build[F[_]: Async: Network: Logger](apiConf: ApiConfig): Resource[F, Server] = {
 
     // Definition of Routes layers
-    val healthRoutes = HealthRoutes.impl[F]
-    val teckelRoutes = TeckelRoutes.impl[F]
+    val healthRoutes    = HealthRoutes.impl[F]
+    val dataFrameRoutes = DataFrameRoutes.impl[F]
+    val teckelRoutes    = TeckelRoutes.impl[F]
 
     // HTTP App
     val httpApp: HttpApp[F] = (
-      healthRoutes <+> teckelRoutes
+      healthRoutes <+> dataFrameRoutes <+> teckelRoutes
     ).orNotFound
 
     // Error handler in case of something wrong
