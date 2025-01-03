@@ -22,10 +22,22 @@
  * SOFTWARE.
  */
 
-package com.eff3ct.teckel.interface
+package com.eff3ct.teckel.app
 
-object error {
+import cats.effect.{ExitCode, IO, IOApp}
+import com.eff3ct.teckel.server.Server
+import com.eff3ct.teckel.server.config.ApiConfig
+import org.typelevel.log4cats.Logger
 
-  case class ApiError(code: Int, message: String)
+object Main extends IOApp {
+
+  override def run(args: List[String]): IO[ExitCode] =
+    for {
+      _         <- Logger[IO].info("Getting api configuration")
+      apiConfig <- ApiConfig.load().handler[IO]
+
+      _      <- Logger[IO].info("Setting up the api server")
+      result <- Server.build[IO](apiConfig).use(_ => IO.never.as(ExitCode.Success))
+    } yield result
 
 }
